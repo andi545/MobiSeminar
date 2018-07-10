@@ -11,76 +11,59 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Paper Title*\\
-{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
-should not be used}
-\thanks{Identify applicable funding agency here. If none, delete this.}
+\title{Crowd Counting Using WiFi\\
+%{\footnotesize \textsuperscript{*}Note: Sub-titles are not captured in Xplore and
+%should not be used}
 }
 
-\author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
+\author{\IEEEauthorblockN{1\textsuperscript{st} Andreas Rayzik}
 \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
 \textit{name of organization (of Aff.)}\\
 City, Country \\
 email address}
-\and
-\IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
-\and
-\IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
-\and
-\IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
-\and
-\IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
-\and
-\IEEEauthorblockN{6\textsuperscript{th} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
+
 }
 
 \maketitle
 
 \begin{abstract}
-This document is a model and instructions for \LaTeX.
-This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, 
-or Math in Paper Title or Abstract.
+By using WiFi as a medium for estimating the number of people in a room or in a certain area, a great potential of cost-saving and simplification of deployment can be leveraged.
 \end{abstract}
 
 \begin{IEEEkeywords}
-component, formatting, style, styling, insert
+WiFi, IoT, people counting, crowd counting
 \end{IEEEkeywords}
 
 \section{Introduction}
-This document is a model and instructions for \LaTeX.
-Please observe the conference page limits. 
+The main motivations behind performing crowd counting in buildings are the applications of energy efficiency, customer guidance in retail stores and traffic optimization "smart" cities. [citation needed] By estimating the number of people in a building, the demand for energy-intensive appliances like air conditioning or heating can be calculated and regulated. By reducing the operation of the appliances for a low number of people, a substantial amount of energy can be saved compared to an unregulated operation. 
+\par
+In customer guidance applications, people could receive information or advertisement based on their proximity to specific products in a store. With the user's consent, this data could be connected to personal characteristics to increase the relevancy of the provided information. For the retail operator, the motivation is to improve user experience and to increase sales counts. For the customer, the additional information can lead to better informed purchase decisions and a feeling of being guided while navigating a store. [citation needed]
+\par
+Motivations for using WiFi in particular are the low cost of using off-the-shelf components like consumer WLAN routers and transceiver sticks. Off-the-shelf hardware comes with approval by the Federal Communications Commission, which allocates frequency ranges and checks for maximum signal strengths [citation needed]. If one were to develop one's own wireless technology for the problem, an assignment of the used frequency range and maximum signal strength would first be mandatory to apply the solution in public places. The process of assignment and checking is complex and time-consuming. This is the reason why using off-the-shelf hardware can save a large amount of resources. (TODO: all methods device-free?)
 
-\section{Ease of Use}
 
-\subsection{Maintaining the Integrity of the Specifications}
+\section{Challenges}
+The hypothetical best solution would be a system with a deployment as easy as setting up one low-cost device per building, in an arbitrary location inside the building, while requiring no manual calibration and minimal automatic calibration. Research has shown that reaching these goals comes with a complicated trade-off and requires creativity and high engineering ingenuity. The following work will provide a history of approaches described in research literature. Additionally, a quantitative comparison between the approaches will be shown. Further, the work tries to give an explanation why the problem has not been solved yet despite many years of research. There will also be a comparison to approaching the crowd counting problem with camera sensors or RFID sensors. This comparison will take the factors of accuracy, cost, privacy and perceived privacy by the target person into account. 
+\par
+In any environments that are not free of obstructions like walls, furniture, people or animals, WiFi signals propagate in a manner that is very hard to predict. Areas of constructive inferences and destructive inferences can change the signal strength for a receiver significantly. (TODO: How much? 0 to double?)
+\par
+\ref{table_overview} provides an overview of the features of the described techniques for crowd counting that have been developed, sorted chronologically.
+\begin{table}
+\caption{Overview of techniques}
+\label{table_overview}
+\centering
+\begin{tabular}{c || c || c || c}
+\hline
+\bfseries Technique & \bfseries \# Nodes
+The feature “calibration” is meant to encompass methods like measureing the signal strength for specific densities of people beforehand, 
+As can be seen in \ref{table_overview}, a rough trend has been to reduce the number of nodes needed as well as the calibration necessary.
+\par
 
-The IEEEtran class file is used to format your paper and style the text. All margins, 
-column widths, line spaces, and text fonts are prescribed; please do not 
-alter them. You may note peculiarities. For example, the head margin
-measures proportionately more than is customary. This measurement 
-and others are deliberate, using specifications that anticipate your paper 
-as one part of the entire proceedings, and not as an independent document. 
-Please do not revise any of the current designations.
+\subsection{Crowd Counting through Walls}
+
+Yuan et al. \cite{Yuan} …
+In 2018, Depatla and Mostofi \cite{DepatlaMostofi} refined their previous approach to be able to increase the maximum number of people to be counted from 10 to 20. At the same time, the calibration needed was reduced further. They extend their concept to be applicable through walls instead of inside walls. However, their new technique comes with a number of assumptions that make it difficult to be translated to a real-world scenario. A general concept of their approach is depicted in \fig{concept}. The transceiver Tx and the receiver Rx are placed on opposite sides outside the walls of the target room. The direct path between them forms the line of sight (LOS). Up to 20 persons move inside the room. A person's movement is described by the movement speed in x and y coordinates and the angle of direction \theta. When one or multiple persons cross the line of sight, the signal is being blocked and attenuated. Also, the presence of persons in the room inevitably leads to multipath effects. 
+
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
