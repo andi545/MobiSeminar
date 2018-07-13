@@ -28,6 +28,7 @@ email address}
 
 \begin{abstract}
 By using WiFi as a medium for estimating the number of people in a room or in a certain area, a great potential of cost-saving and simplification of deployment can be leveraged.
+\vspace{80mm}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -40,30 +41,66 @@ The main motivations behind performing crowd counting in buildings are the appli
 In customer guidance applications, people could receive information or advertisement based on their proximity to specific products in a store. With the user's consent, this data could be connected to personal characteristics to increase the relevancy of the provided information. For the retail operator, the motivation is to improve user experience and to increase sales counts. For the customer, the additional information can lead to better informed purchase decisions and a feeling of being guided while navigating a store. [citation needed]
 \par
 Motivations for using WiFi in particular are the low cost of using off-the-shelf components like consumer WLAN routers and transceiver sticks. Off-the-shelf hardware comes with approval by the Federal Communications Commission, which allocates frequency ranges and checks for maximum signal strengths [citation needed]. If one were to develop one's own wireless technology for the problem, an assignment of the used frequency range and maximum signal strength would first be mandatory to apply the solution in public places. The process of assignment and checking is complex and time-consuming. This is the reason why using off-the-shelf hardware can save a large amount of resources. (TODO: all methods device-free?)
+\par
+The following work will provide a history of approaches described in research literature. Additionally, a quantitative comparison between the approaches will be shown. Further, the work tries to give an explanation why the problem has not been solved yet despite many years of research. The main contribution of this paper will be a comparison to approaching the crowd counting problem with either WiFi technology, camera sensors or RFID sensors. This comparison will take the factors of accuracy, cost, privacy and perceived privacy by the target person into account. 
 
 
 \section{Challenges}
-The hypothetical best solution would be a system with a deployment as easy as setting up one low-cost device per building, in an arbitrary location inside the building, while requiring no manual calibration and minimal automatic calibration. Research has shown that reaching these goals comes with a complicated trade-off and requires creativity and high engineering ingenuity. The following work will provide a history of approaches described in research literature. Additionally, a quantitative comparison between the approaches will be shown. Further, the work tries to give an explanation why the problem has not been solved yet despite many years of research. There will also be a comparison to approaching the crowd counting problem with camera sensors or RFID sensors. This comparison will take the factors of accuracy, cost, privacy and perceived privacy by the target person into account. 
+The hypothetical best solution would be a system with a deployment as easy as setting up one low-cost device per building, in an arbitrary location inside the building, while requiring no manual calibration and minimal automatic calibration. Research has shown that reaching these goals comes with a complicated trade-off and requires creativity and high engineering ingenuity. 
 \par
-In any environments that are not free of obstructions like walls, furniture, people or animals, WiFi signals propagate in a manner that is very hard to predict. Areas of constructive inferences and destructive inferences can change the signal strength for a receiver significantly. (TODO: How much? 0 to double?)
+In any environments that are not free of obstructions like walls, furniture, people or animals, WiFi signals propagate in a manner that is very hard to predict. Areas of constructive inferences and destructive inferences can change the signal strength for a receiver significantly. (TODO: How much? 0 to double?) When setting up a WLAN router for a home or a public building, positioning of the router is important. Slight changes in position can mean large changes in signal coverage for the building. Especially coverage of frequented areas is desirable. As WiFi signals consist of electromagnetic radiation, its interference pattern is shaped by its wavelength. The wavelength $\lambda$ can be calculated by: $$\lambda = \frac{c}{f}$$ With the speed of light $c$, the wavelength evaluates to approximately 12.5cm for 2,4GHz WiFi and approximately 6.25cm for 5GHz WiFi respectively.
+
 \par
-\ref{table_overview} provides an overview of the features of the described techniques for crowd counting that have been developed, sorted chronologically.
-\begin{table}
+Table \ref{table_overview} provides an overview of the features of the described techniques for crowd counting that have been developed, sorted chronologically.
+\begin{table*}
 \caption{Overview of techniques}
 \label{table_overview}
 \centering
-\begin{tabular}{c || c || c || c}
+\begin{tabular}{c || c || c || c || c}
 \hline
-\bfseries Technique & \bfseries \# Nodes
-The feature “calibration” is meant to encompass methods like measureing the signal strength for specific densities of people beforehand, 
+\bfseries \textbf{Author} & \textbf{Publication} & \bfseries\textbf{\# Nodes} & \bfseries \textbf{Max. \# People} & \bfseries \textbf{Calibration} \\
+\hline
+Yuan et al. & 2011 & 16 & Low/Medium/High & Not mentioned \\
+\hline
+Xu et al. & 2013 & 22 & 4 (+ location) & Little (Empty room RSS meas.) \\
+\hline
+Xi et al. & 2014 & 38 & 30 & Extensive \\
+\hline
+Yoshida/Taniguchi & 2015 & 11 & 7 & Extensive \\
+\hline
+Depatla et al. & 2015 & 2 & 10 & Little \\
+\hline
+Domenico et al. & 2016 & 2 & 7 & Extensive \\
+\hline
+Depatla/Mostofi & 2018 & 2 & 20 & Very little
+\end{tabular}
+\end{table*}
+The feature "calibration" is meant to encompass methods like measuring the signal strength for specific densities of people beforehand, 
 As can be seen in \ref{table_overview}, a rough trend has been to reduce the number of nodes needed as well as the calibration necessary.
 \par
+Bla
+\subsection{Crowd Density Estimation Using Wireless Sensor Networks}
+Yuan et al. \cite{Yuan} use Wireless Sensor Networks (WSN) to achieve an estimate of the crowd density in a room. A calibration step and a detection step are being iterated in pairs. They validate their approach by deploying a network of 16 wireless sensors. 
+\par
+The network uses the Collection Tree Protocol (CTP) \cite{ctp}. The CTP is required to collect the data gathered by the sensors reliably and efficiently. Moreover, it aims to minimize energy consumption to extend the sensors' battery lives. It extends the distance vector routing protocol by three additional mechanisms in order to adapt to the special conditions in highly dynamic wireless networks.
+\begin{itemize}
+\item Information from the physical layer, network layer and link layer are combined to estimate the link quality between two nodes with a resolution of four bits.
+\item To detect datapaths that have become unreliable, data packets contain the transmitter's local cost estimate. The expected transmissions (ETX) can be used as a cost metric. When a packet is being forwarded, the transmitter's cost is expected to always be greater than the forwarding node's own cost. A deviation from this assumption hints at a loop in the network.
+\item Adaptive Beaconing deals with the compromise of choosing a large or small interval for sending control packets. A large interval saves bandwidth and energy, but makes the network slower to react to adverse wireless dynamics. Adaptive beaconing changes the interval according to the consistency and problem rate in the network.
+\end{itemize}
+In the detection step, the K-means algorithm is used to cluster the data from the WSN into density levels of low, medium of high. The thresholds for these levels are set arbitrarily and can be changed. For the number of clusters K, the best convergence was achieved with $K=2$.
+
+
+\subsection{SCPL: Indoor Device-Free Multi-Subject Counting and Localization Using Radio Signal Strength}
+Xu et al. \cite{Xu} use the long-range property of radio signals to deploy a counting technique in two large indoor settings with 150$m^2$ and 400$m^2$. They can detect up to four subjects which is a low number compared to the other works, but it includes the subject's location. The abbreviation SCPL refers to the way of counting the number of subjects sequentially while doing the localization in parallel. They model the human trajectories as a state transition process and use Conditional Random Fields (CRF) to attack the localization problem.
+\par
+As a calibration, the RSS values for every link are measured when the rooms are empty. This data can then be used to determine how much a subject's presence alters the RSS value in a cell. For the presence of multiple subjects, a hypothesis is being made that it will "affect a larger number of spatially distributed radio links, [...] also lead to a higher level of RSS change on these links." Instead of using the RSS mean difference as a metric, the authors propose the absolute RSS mean difference. As the reason for this, they state that the additional presence of another subject might not always weaken a link. Due to multipath effects, it might actually strengthen a link. Thus, the RSS mean difference is not always positive.
 
 \subsection{Crowd Counting through Walls}
-
-Yuan et al. \cite{Yuan} …
-In 2018, Depatla and Mostofi \cite{DepatlaMostofi} refined their previous approach to be able to increase the maximum number of people to be counted from 10 to 20. At the same time, the calibration needed was reduced further. They extend their concept to be applicable through walls instead of inside walls. However, their new technique comes with a number of assumptions that make it difficult to be translated to a real-world scenario. A general concept of their approach is depicted in \fig{concept}. The transceiver Tx and the receiver Rx are placed on opposite sides outside the walls of the target room. The direct path between them forms the line of sight (LOS). Up to 20 persons move inside the room. A person's movement is described by the movement speed in x and y coordinates and the angle of direction \theta. When one or multiple persons cross the line of sight, the signal is being blocked and attenuated. Also, the presence of persons in the room inevitably leads to multipath effects. 
-
+In 2018, Depatla and Mostofi \cite{DepatlaMostofi} refined their previous approach to be able to increase the maximum number of people to be counted from 10 to 20. At the same time, the calibration needed was reduced further. They extend their concept to be applicable through walls instead of inside walls. However, their new technique comes with a number of assumptions that make it difficult to be translated to a real-world scenario. A general concept of their approach is depicted in \ref{concept}. The transceiver Tx and the receiver Rx are placed on opposite sides outside the walls of the target room. The direct path between them forms the line of sight (LOS). Up to 20 persons move inside the room. A person's movement is described by the movement speed in x and y coordinates and the angle of direction $\theta$. When one or multiple persons cross the line of sight, the signal is being blocked and attenuated. Also, the presence of persons in the room inevitably leads to multipath effects. 
+\begin{figure}
+\label{concept}
+\end{figure}
 
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
@@ -212,7 +249,7 @@ copy& More table copy$^{\mathrm{a}}$& &  \\
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
+\centerline{\includegraphics[scale=0.2]{fig1.png}}
 \caption{Example of a figure caption.}
 \label{fig}
 \end{figure}
@@ -236,7 +273,7 @@ acknowledgments in the unnumbered footnote on the first page.
 
 \section*{References}
 
-Please number citations consecutively within brackets \cite{b1}. The 
+Please number citations consecutively within brackets. The 
 sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
 number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
 the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
@@ -256,10 +293,9 @@ For papers published in translation journals, please give the English
 citation first, followed by the original foreign-language citation \cite{b6}.
 
 \begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
+\bibitem{DepatlaMostofi} S. Depatla and Y. Mostofi, ``Crowd Counting Through Walls Using Wifi,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
+\bibitem{Yuan} Yuan et. al., ``Crowd Density Estimation Using Wireless Sensor Networks'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
+\bibitem{ctp} O. Gnawali et al., ``Collection Tree Protocol''
 \bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
 \bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
 \bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
