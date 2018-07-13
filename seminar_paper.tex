@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{bm}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -94,7 +95,9 @@ In the detection step, the K-means algorithm is used to cluster the data from th
 \subsection{SCPL: Indoor Device-Free Multi-Subject Counting and Localization Using Radio Signal Strength}
 Xu et al. \cite{Xu} use the long-range property of radio signals to deploy a counting technique in two large indoor settings with 150$m^2$ and 400$m^2$. They can detect up to four subjects which is a low number compared to the other works, but it includes the subject's location. The abbreviation SCPL refers to the way of counting the number of subjects sequentially while doing the localization in parallel. They model the human trajectories as a state transition process and use Conditional Random Fields (CRF) to attack the localization problem.
 \par
-As a calibration, the RSS values for every link are measured when the rooms are empty. This data can then be used to determine how much a subject's presence alters the RSS value in a cell. For the presence of multiple subjects, a hypothesis is being made that it will "affect a larger number of spatially distributed radio links, [...] also lead to a higher level of RSS change on these links." Instead of using the RSS mean difference as a metric, the authors propose the absolute RSS mean difference. As the reason for this, they state that the additional presence of another subject might not always weaken a link. Due to multipath effects, it might actually strengthen a link. Thus, the RSS mean difference is not always positive.
+As a calibration, the RSS values for every link are measured when the rooms are empty. This data can then be used to determine how much a subject's presence alters the RSS value in a cell. For the presence of multiple subjects, a hypothesis is being made that it will "affect a larger number of spatially distributed radio links, [...] also lead to a higher level of RSS change on these links." Instead of using the RSS mean difference as a metric, the authors propose the absolute RSS mean difference. As the reason for this, they state that the additional presence of another subject might not always weaken a link. Due to multipath effects, it might actually strengthen a link. Thus, the RSS mean difference is not always positive. The absolute RSS mean difference represents the total energy change more suitably.
+\par
+The researchers exploit the fact that human movement constitutes a continuous trajectory. They model the movement as a CRF, which is a type of discriminative undirected probabilistic graphical model \cite{crf}. CRFs are comparable to hidden Markov models (HMMs), but possess for example the advantage to be able to relax strong independence assumptions. CRFs models the probability $$p(\bm{Y}|\bm{X})$$ for the jointly distributed random variables $\bm{Y}$ and $\bm{X}$. The aim is to maximize the likelihood that a subject is located in the same cell $i$ that was estimated. The cells correspong to the states there were defined as $\bm{Y}$.
 
 \subsection{Crowd Counting through Walls}
 In 2018, Depatla and Mostofi \cite{DepatlaMostofi} refined their previous approach to be able to increase the maximum number of people to be counted from 10 to 20. At the same time, the calibration needed was reduced further. They extend their concept to be applicable through walls instead of inside walls. However, their new technique comes with a number of assumptions that make it difficult to be translated to a real-world scenario. A general concept of their approach is depicted in \ref{concept}. The transceiver Tx and the receiver Rx are placed on opposite sides outside the walls of the target room. The direct path between them forms the line of sight (LOS). Up to 20 persons move inside the room. A person's movement is described by the movement speed in x and y coordinates and the angle of direction $\theta$. When one or multiple persons cross the line of sight, the signal is being blocked and attenuated. Also, the presence of persons in the room inevitably leads to multipath effects. 
@@ -102,6 +105,11 @@ In 2018, Depatla and Mostofi \cite{DepatlaMostofi} refined their previous approa
 \label{concept}
 \end{figure}
 
+\section{Discussion}
+All of the works presented are limited by the number of people that can be counted at maximum, by the size of the room or other conditions. This makes it difficult to apply them to real-world scenarios. The work by Depatla and Mostofi \cite{DepatlaMostofi} makes particularly strong assumptions. These assumptions and to what degree they prevent the transition to a real-world scenario will be discussed in the following.
+\begin{itemize}
+\item Random movement patterns by the subjects are assumed. This might be applicable to a situation in which a subject is searching for a certain object, with few clues to where said object might be located. It is problematic in a case in which people partially or in their entirety move as a group with a common goal.
+\end{itemize}
 \section{Prepare Your Paper Before Styling}
 Before you begin to format your paper, first write and save the content as a 
 separate text file. Complete all content and organizational editing before 
@@ -296,7 +304,8 @@ citation first, followed by the original foreign-language citation \cite{b6}.
 \bibitem{DepatlaMostofi} S. Depatla and Y. Mostofi, ``Crowd Counting Through Walls Using Wifi,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
 \bibitem{Yuan} Yuan et. al., ``Crowd Density Estimation Using Wireless Sensor Networks'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
 \bibitem{ctp} O. Gnawali et al., ``Collection Tree Protocol''
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
+\bibitem{crf} J. Lafferty et al., Condit
+ional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence Data
 \bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
 \bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
 \end{thebibliography}
