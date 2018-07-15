@@ -173,7 +173,7 @@ Despite all of the problems mentioned, the work makes arguments to how an applic
 In general, to facilitate crowd counting for moving subjects, are reasonably high sampling rate is required. Else, the movement of people during one measurement sample could introduce too much noise and make it inaccurate. Subjects that enter and leave an area quickly might not be counted at all. This makes approaches using radio wave modelling difficult to implement. In a three-dimensional setting, models for radio waves are computationally intensive. When high resolution is required, the computational costs are further enlarged. To make such a technique feasible, a highly optimised and parallelised algorithm running on a GPU or FPGA is probably needed. GPUs are processors that offer a much higher degree of potential parallelism compared to a CPU. The disadvantage is that designing a parallelisable algorithm is challenging and programming it for a GPU is difficult as well. FPGAs are chips in which the circuitry itself is programmable for the user. The offer a higher degree of flexibility in contrast to GPUs, but therefore inevitably also increase the complexity of software design.
 
 \subsection{Importance of the amount of calibration required}
-The amount of calibration needed for the different techniques compared in table ~\ref{table_overview} does not finally decide over the usefulness of a given technique. Rather, it needs to be put into context with the type of application and area. For approaches that scale to areas and number of people for large events, a high calibration amount is most likely appropriate and worth its effort. On the other hand, for applications where the focus lies on quick deployment and easy setup, an extensive calibration interferes with the usefulness of the approach. Some of the techniques need calibration in an empty room, like the one by \cite{Xu}. If the room is empty at the time of deployment, this calibration step does not add further complications. Calibration methods that require a known number of subjects to be moving randomly or in defined patterns across the area, it is conceivable to automate this step using autonomous robots. The robots will need to be similar to humans in their dimensions and movement speed.
+The amount of calibration needed for the different techniques compared in table ~\ref{table_overview} does not finally decide over the usefulness of a given technique. Rather, it needs to be put into context with the type of application and area. For approaches that scale to areas and number of people for large events, a high calibration amount is most likely appropriate and worth its effort. On the other hand, for applications where the focus lies on quick deployment and easy setup, an extensive calibration interferes with the usefulness of the approach. Some of the techniques need calibration in an empty room, like the one by Xu et al.\cite{Xu}. If the room is empty at the time of deployment, this calibration step does not add further complications. Calibration methods that require a known number of subjects to be moving randomly or in defined patterns across the area, it is conceivable to automate this step using autonomous robots. The robots will need to be similar to humans in their dimensions and movement speed.
 
 \subsection{Scalability considerations}
 Scaling an approach to a high number of people as it might be prevalent in a real-world scenario adds an additional challenge. Of all the methods presented, the one by Xi et al. \cite{Xi} reports the highest maximum number of people countable, which is 30. However, one of their result diagrams shown in figure \ref{figFrogeyeConvergence} very clearly that the approach will not scale beyond this number. In the diagram, the percentage of non-zero elements metric (PEM) that they introduce and the estimation error are plotted along the axis of ordinates. Along the axis of abscissae, the number of people from 0 to 30 is presented. It is obvious that the PEM converges at about 20 people. At the same time, the estimation error rises in a seemingly exponential manner.
@@ -196,7 +196,26 @@ All of the methods discussed so far have been device-free. This means that the s
 In the case using smartphones to identify people, this implies complications for user privacy. Smartphones are personal devices, usually used by one person exclusively, containing sensible and potentially valuable personal data. The common approach is to have WiFi or Bluetooth beacons which can sense a smartphone. Smartphones typically scan for open WiFi hotspots and Bluetooth devices at regular intervals. These intervals vary from device to device and by software configuration. If the smartphone is currently in some battery saving state, the interval could be lengthened to the point where a user could walk by a beacon without his smartphone sending a signal to it. In general though, the beacon will catch the smartphones in its surroundings. To protect the users' privacy, the beacon will only save the device's MAC address, which is the address on the physical layer. The MAC address is distinct from a phone's IMEI (International Mobile Equipment Identity). It is not linked to the phone call number in any way. To anonymise the users further, the MAC addresses should be hashed by a modern hashing algorithm like SHA-256. A hashing algorithm is an algorithm that takes an input of arbitrary length and outputs a code of fixed length. It is designed to be infeasible to reverse, so the output code cannot be converted back to the original input. However, the limited number of possible MAC addresses poses a problem. There are $2^48$ possible addresses. With modern, parallel cloud computing and a large enough budget, it is possible to compute the hashes for every possible address in advance and store them in a so-called rainbow-table. The table could then be used as a quick lookup and defy the purpose of the hashing function. During the recent Cryptocurrency mining trend, special ASIC chips have been designed that are especially fast and efficient at computing hash functions \cite{crypto}. If an attacker has access to these kind of devices, he might be able to compute a rainbow table with a substantially reduced budget. A way of mitigating this threat is to add random code to the MAC addresses before hashing. In cryptography, this is called Salting. Nevertheless, the salts need to be stored and can also be stolen by an attacker.
 
 \section{Elaboration of privacy and perceived privacy by the user}
-
+Device-based methods protect the users' privacy, if only the MAC addresses are collected and hashed with a modern hashing algorithm. However, the users might perceive their privacy as being intruded when it is explained to them that their smartphone is being detected by a beacon. Users are typically not conscious about the fact that their phones are constantly scanning for WiFi hotspots and Bluetooth devices anyway. When they learn that the MAC address is a number on their device, they might confuse it with their phone number that others can use to call them or send text messages. When there are multiple visible beacons in a building that users come across along their way, it might lead to the impression that they are being traced and their route could be followed. The distinction between counting and tracking is crucial when communicating the technology's purpose to the user.
+\begin{table*}
+\caption{Privacy and perceived privacy for different methods}
+\label{table_privacy}
+\centering
+\begin{tabular}{c || c || c}
+\hline
+\bfseries \textbf{Method} & \textbf{Privacy} & \bfseries\textbf{Perceived privacy} \\
+\hline
+Device-free (e.g. SCPL) & Yes & Yes\\
+\hline
+Sensor data & Yes & Yes \\
+\hline
+Real-time people counting from depth imagery & No & No \\
+\hline
+Counting people with multiple cameras & No & No \\
+\hline
+Device-based & Yes & No
+\end{tabular}
+\end{table*}
 
 \section{Conclusion}
 Complex wave propagation and decoherence make crowd counting using WiFi a challenging task that is yet to be solved without significant limitations. Scalability to a high number of people is difficult. Techniques refer to a diverse set of basic methods like the Collection Tree Protocol, Conditional Random Fields or Renewal theory. Assumptions made in research literature often do not translate to real-world scenarios. Device-based methods impose additional complications for privacy. Research is still experimental, emerging and ongoing.
@@ -299,27 +318,32 @@ element symbols.
 
 For papers published in translation journals, please give the English 
 citation first, followed by the original foreign-language citation \cite{b6}.
-%TODO more references
+
 \begin{thebibliography}{00}
-\bibitem{Agarwal} Occupancy-Driven Energy Management for Smart Building Automation
-\bibitem{RetailStores} Effect of Traffic on Sales and Conversion Rates of Retail Stores
-\bibitem{DepatlaMostofi2018} S. Depatla and Y. Mostofi, ``Crowd Counting Through Walls Using Wifi,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{Yuan} Yuan et. al., ``Crowd Density Estimation Using Wireless Sensor Networks'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{ctp} O. Gnawali et al., ``Collection Tree Protocol''
-\bibitem{crf} J. Lafferty et al., Condit
-ional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence Data
-\bibitem{DepatlaMostofi2015} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``X-Ray Vision with Only WiFi Power Measurements Using Rytov Wave Models'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{Xu} Xu et al. SCPL: Indoor Device-Free Multi-Subject Counting and Localization Using Radio Signal Strength
-\bibitem{Xi} Xi et al. Electronic Frog Eye: Counting Crowd Using WiFi
-\bibitem{Yoshida} Yoshida "Estimating the number of people using existing WiFi access point
-in indoor environment"
-\bibitem{OpenWrt} https://openwrt.org/
-\bibitem{fcctable} https://transition.fcc.gov/oet/spectrum/table/fcctable.pdf
-\bibitem{crypto} https://arstechnica.com/information-technology/2013/06/gold-in-them-bits-inside-the-worlds-most-mysterious-bitcoin-mining-company/2/
+\bibitem{Agarwal} Y. Agarwal, B. Balaji, R. Gupta, J. Lyles, M. Wei, and T. Weng, 
+"Occupancy-Driven Energy Management for Smart Building Automation," in Proceedings of the 2nd ACM Workshop on Embedded Sensing Systems for Energy-Efficiency in Building. ACM, 2010, pp. 1–6.
+\bibitem{RetailStores} O. Perdikaki, S. Kesavan, and J. M. Swaminathan, "Effect of traffic on sales and conversion rates of retail stores," Manufacturing & Service Operations Management, vol. 14, no. 1, pp.145–162, 2012.
+\bibitem{fcctable} Federal Communications Commission Office of Engineering and Technology Policy and Rules Division, "FCC ONLINE TABLE OF FREQUENCY ALLOCATIONS," 2018. [Online]. Available: https://transition.fcc.gov/oet/spectrum/table/fcctable.pdf. [Accessed: 08- Jun- 2018].
+\bibitem{Yuan} Y. Yuan, C. Qiu, W. Xi, and J. Zhao, “Crowd density estimation using wireless sensor networks,” in Seventh International Conference on Mobile Ad-hoc and Sensor Networks. IEEE, 2011, pp. 138–145.
+
+
+\bibitem{ctp} O. Gnawali, R. Fonseca, K. Jamieson, D. Moss, and P. Levis, "Collection Tree Protocol," In ACM Transactions on Sensor Networks (TOSN), Vol. 10, No. 3, 2013.
+\bibitem{Xu} C. Xu, B. Firner, R. S. Moore, Y. Zhang, W. Trappe, R. Howard, F. Zhang, and N. An, "SCPL: indoor device-free multi-subject counting and localization using radio signal strength," in ACM/IEEE International Conference on Information Processing in Sensor Networks. IEEE, 2013, pp. 79–90.
+\bibitem{crf} J. Lafferty, A. McCallum, and F. C.N. Pereira, "Conditional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence Data," in Proceedings of the 18th International Conference on Machine Learning 2001 (ICML 2001), pages 282-289.
+
+\bibitem{Xi} W. Xi, J. Zhao, X.-Y. Li, K. Zhao, S. Tang, X. Liu, and Z. Jiang, "Electronic frog eye: Counting crowd using WiFi," in IEEE INFOCOM 2014-IEEE Conference on Computer Communications, pp. 361–369.
+
+
+\bibitem{Yoshida} T. Yoshida and Y. Taniguchi, "Estimating the number of people using existing WiFi access point in indoor environment," in Proceedings of the 6th European Conference of Computer Science, 2015, pp. 46–53.
+
+\bibitem{DepatlaMostofi2015} S. Depatla, L. Buckland, and Y. Mostofi, "X-ray vision with only wifi power measurements using rytov wave models," IEEE Trans. on Vehicular Technology, vol. 64, no. 4, pp. 1376-1387, 2015.
+
+\bibitem{DepatlaMostofi2018} S. Depatla and Y. Mostofi, "Crowd Counting Through Walls Using Wifi," to appear in IEEE International Conference on Pervasive Computing and Communications, 2018.
+\bibitem{OpenWrt} [Online]. Available: https://openwrt.org/. [Accessed: 12- Jun- 2018].
+
+\bibitem{crypto} [Online]. Available: https://arstechnica.com/information-technology/2013/06/gold-in-them-bits-inside-the-worlds-most-mysterious-bitcoin-mining-company/2/. [Accessed: 13- Jun- 2018].
 
 \end{thebibliography}
-\vspace{12pt}
-\color{red}
-IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
+
 
 \end{document}
