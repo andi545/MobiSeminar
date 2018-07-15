@@ -176,16 +176,16 @@ In general, to facilitate crowd counting for moving subjects, are reasonably hig
 The amount of calibration needed for the different techniques compared in table ~\ref{table_overview} does not finally decide over the usefulness of a given technique. Rather, it needs to be put into context with the type of application and area. For approaches that scale to areas and number of people for large events, a high calibration amount is most likely appropriate and worth its effort. On the other hand, for applications where the focus lies on quick deployment and easy setup, an extensive calibration interferes with the usefulness of the approach. Some of the techniques need calibration in an empty room, like the one by \cite{Xu}. If the room is empty at the time of deployment, this calibration step does not add further complications. Calibration methods that require a known number of subjects to be moving randomly or in defined patterns across the area, it is conceivable to automate this step using autonomous robots. The robots will need to be similar to humans in their dimensions and movement speed.
 
 \subsection{Scalability considerations}
-Scaling an approach to a high number of people as it might be prevalent in a real-world scenario adds an additional challenge. Of all the methods presented, the one by Xi et al. \cite{Xi} reports the highest maximum number of people countable, which is 30. However, one of their result diagrams shown in figure \ref{figFrogeyeConvergence} very clearly that the approach will not scale beyond this number. In the diagram, the percentage of non-zero elements metric (PEM) that they introduce and the estimation error are plotted along the axis of ordinates. Along the axis of abscissae, the number of people from 0 to 30 is presented. It is obvious that the PEM converges at about 20 people. At the same time, the estimation error rises in an seemingly exponential manner.
+Scaling an approach to a high number of people as it might be prevalent in a real-world scenario adds an additional challenge. Of all the methods presented, the one by Xi et al. \cite{Xi} reports the highest maximum number of people countable, which is 30. However, one of their result diagrams shown in figure \ref{figFrogeyeConvergence} very clearly that the approach will not scale beyond this number. In the diagram, the percentage of non-zero elements metric (PEM) that they introduce and the estimation error are plotted along the axis of ordinates. Along the axis of abscissae, the number of people from 0 to 30 is presented. It is obvious that the PEM converges at about 20 people. At the same time, the estimation error rises in a seemingly exponential manner.
 \begin{figure}[htbp]
-\centerline{\includegraphics[scale=0.4]{figFrogeyeConvergence.PNG}}
+\centerline{\includegraphics[scale=0.8]{figFrogeyeConvergence.PNG}}
 \caption{The maximum distinguished number of people \cite{Xi}}
 \label{figFrogeyeConvergence}
 \end{figure}
 
 Their CSI measurements for increasing numbers of people illustrate the reason for this behaviour \ref{figFrogeyeCsiVariation}. The diagrams show CSI measurements for 0, 2, 4 and 6 moving persons. While in the case of 2 and 4 persons the CSI variation is still perceivable by looking at plot, the case of 6 persons makes it apparent that the pattern starts to resemble a noise pattern.
 \begin{figure}[htbp]
-\centerline{\includegraphics[scale=0.4]{figFrogeyeCsiVariation.png}}
+\centerline{\includegraphics[scale=0.6]{figFrogeyeCsiVariation.png}}
 \caption{CSI measurements of one subcarrier with different moving people \cite{Xi}}
 \label{figFrogeyeCsiVariation}
 \end{figure}
@@ -193,103 +193,15 @@ Their CSI measurements for increasing numbers of people illustrate the reason fo
 \section{Comparison of device-free and device-based methods}
 All of the methods discussed so far have been device-free. This means that the subjects to count are not required to carry any sort of device with them. The method relies solely on the property of human bodies to reflect and attenuate WiFi signals, thereby altering the signal strength in the receiver. In contrast, device-based methods work by either assuming that the subjects are carrying a device (usually a smartphone) or handing out devices to them to carry prior to the counting phase.
 \par
+In the case using smartphones to identify people, this implies complications for user privacy. Smartphones are personal devices, usually used by one person exclusively, containing sensible and potentially valuable personal data. The common approach is to have WiFi or Bluetooth beacons which can sense a smartphone. Smartphones typically scan for open WiFi hotspots and Bluetooth devices at regular intervals. These intervals vary from device to device and by software configuration. If the smartphone is currently in some battery saving state, the interval could be lengthened to the point where a user could walk by a beacon without his smartphone sending a signal to it. In general though, the beacon will catch the smartphones in its surroundings. To protect the users' privacy, the beacon will only save the device's MAC address, which is the address on the physical layer. The MAC address is distinct from a phone's IMEI (International Mobile Equipment Identity). It is not linked to the phone call number in any way. To anonymise the users further, the MAC addresses should be hashed by a modern hashing algorithm like SHA-256. A hashing algorithm is an algorithm that takes an input of arbitrary length and outputs a code of fixed length. It is designed to be infeasible to reverse, so the output code cannot be converted back to the original input. However, the limited number of possible MAC addresses poses a problem. There are $2^48$ possible addresses. With modern, parallel cloud computing and a large enough budget, it is possible to compute the hashes for every possible address in advance and store them in a so-called rainbow-table. The table could then be used as a quick lookup and defy the purpose of the hashing function. During the recent Cryptocurrency mining trend, special ASIC chips have been designed that are especially fast and efficient at computing hash functions \cite{crypto}. If an attacker has access to these kind of devices, he might be able to compute a rainbow table with a substantially reduced budget. A way of mitigating this threat is to add random code to the MAC addresses before hashing. In cryptography, this is called Salting. Nevertheless, the salts need to be stored and can also be stolen by an attacker.
+
+\section{Elaboration of privacy and perceived privacy by the user}
 
 
 \section{Conclusion}
-Complex wave propagation and decoherence make crowd counting using WiFi a challenging task that is yet to be solved without significant limitations. Techniques refer to a diverse set of basic methods like the Collection Tree Protocol, Conditional Random Fields or Renewal theory. Assumptions made in research literature often do not translate to real-world scenarios.
+Complex wave propagation and decoherence make crowd counting using WiFi a challenging task that is yet to be solved without significant limitations. Scalability to a high number of people is difficult. Techniques refer to a diverse set of basic methods like the Collection Tree Protocol, Conditional Random Fields or Renewal theory. Assumptions made in research literature often do not translate to real-world scenarios. Device-based methods impose additional complications for privacy. Research is still experimental, emerging and ongoing.
 
-\section{Prepare Your Paper Before Styling}
-Before you begin to format your paper, first write and save the content as a 
-separate text file. Complete all content and organizational editing before 
-formatting. Please note sections \ref{AA}--\ref{SCM} below for more information on 
-proofreading, spelling and grammar.
 
-Keep your text and graphic files separate until after the text has been 
-formatted and styled. Do not number text heads---{\LaTeX} will do that 
-for you.
-
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
-even after they have been defined in the abstract. Abbreviations such as 
-IEEE, SI, MKS, CGS, ac, dc, and rms do not have to be defined. Do not use 
-abbreviations in the title or heads unless they are unavoidable.
-
-\subsection{Units}
-\begin{itemize}
-\item Use either SI (MKS) or CGS as primary units. (SI units are encouraged.) English units may be used as secondary units (in parentheses). An exception would be the use of English units as identifiers in trade, such as ``3.5-inch disk drive''.
-\item Avoid combining SI and CGS units, such as current in amperes and magnetic field in oersteds. This often leads to confusion because equations do not balance dimensionally. If you must use mixed units, clearly state the units for each quantity that you use in an equation.
-\item Do not mix complete spellings and abbreviations of units: ``Wb/m\textsuperscript{2}'' or ``webers per square meter'', not ``webers/m\textsuperscript{2}''. Spell out units when they appear in text: ``. . . a few henries'', not ``. . . a few H''.
-\item Use a zero before decimal points: ``0.25'', not ``.25''. Use ``cm\textsuperscript{3}'', not ``cc''.)
-\end{itemize}
-
-\subsection{Equations}
-Number equations consecutively. To make your 
-equations more compact, you may use the solidus (~/~), the exp function, or 
-appropriate exponents. Italicize Roman symbols for quantities and variables, 
-but not Greek symbols. Use a long dash rather than a hyphen for a minus 
-sign. Punctuate equations with commas or periods when they are part of a 
-sentence, as in:
-\begin{equation}
-a+b=\gamma\label{eq}
-\end{equation}
-
-Be sure that the 
-symbols in your equation have been defined before or immediately following 
-the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
-the beginning of a sentence: ``Equation \eqref{eq} is . . .''
-
-\subsection{\LaTeX-Specific Advice}
-
-Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
-of ``hard'' references (e.g., \verb|(1)|). That will make it possible
-to combine sections, add equations, or change the order of figures or
-citations without having to go through the file line by line.
-
-Please don't use the \verb|{eqnarray}| equation environment. Use
-\verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
-environment leaves unsightly spaces around relation symbols.
-
-Please note that the \verb|{subequations}| environment in {\LaTeX}
-will increment the main equation counter even when there are no
-equation numbers displayed. If you forget that, you might write an
-article in which the equation numbers skip from (17) to (20), causing
-the copy editors to wonder if you've discovered a new method of
-counting.
-
-{\BibTeX} does not work by magic. It doesn't get the bibliographic
-data from thin air but from .bib files. If you use {\BibTeX} to produce a
-bibliography you must send the .bib files. 
-
-{\LaTeX} can't read your mind. If you assign the same label to a
-subsubsection and a table, you might find that Table I has been cross
-referenced as Table IV-B3. 
-
-{\LaTeX} does not have precognitive abilities. If you put a
-\verb|\label| command before the command that updates the counter it's
-supposed to be using, the label will pick up the last counter to be
-cross referenced instead. In particular, a \verb|\label| command
-should not go before the caption of a figure or a table.
-
-Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
-will not stop equation numbers inside \verb|{array}| (there won't be
-any anyway) and it might stop a wanted equation number in the
-surrounding equation.
-
-\subsection{Some Common Mistakes}\label{SCM}
-\begin{itemize}
-\item The word ``data'' is plural, not singular.
-\item The subscript for the permeability of vacuum $\mu_{0}$, and other common scientific constants, is zero with subscript formatting, not a lowercase letter ``o''.
-\item In American English, commas, semicolons, periods, question and exclamation marks are located within quotation marks only when a complete thought or name is cited, such as a title or full quotation. When quotation marks are used, instead of a bold or italic typeface, to highlight a word or phrase, punctuation should appear outside of the quotation marks. A parenthetical phrase or statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within the parentheses.)
-\item A graph within a graph is an ``inset'', not an ``insert''. The word alternatively is preferred to the word ``alternately'' (unless you really mean something that alternates).
-\item Do not use the word ``essentially'' to mean ``approximately'' or ``effectively''.
-\item In your paper title, if the words ``that uses'' can accurately replace the word ``using'', capitalize the ``u''; if not, keep using lower-cased.
-\item Be aware of the different meanings of the homophones ``affect'' and ``effect'', ``complement'' and ``compliment'', ``discreet'' and ``discrete'', ``principal'' and ``principle''.
-\item Do not confuse ``imply'' and ``infer''.
-\item The prefix ``non'' is not a word; it should be joined to the word it modifies, usually without a hyphen.
-\item There is no period after the ``et'' in the Latin abbreviation ``et al.''.
-\item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
-\end{itemize}
-An excellent style manual for science writers is \cite{b7}.
 
 \subsection{Authors and Affiliations}
 \textbf{The class file is designed for, but not limited to, six authors.} A 
@@ -403,6 +315,7 @@ ional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence D
 in indoor environment"
 \bibitem{OpenWrt} https://openwrt.org/
 \bibitem{fcctable} https://transition.fcc.gov/oet/spectrum/table/fcctable.pdf
+\bibitem{crypto} https://arstechnica.com/information-technology/2013/06/gold-in-them-bits-inside-the-worlds-most-mysterious-bitcoin-mining-company/2/
 
 \end{thebibliography}
 \vspace{12pt}
