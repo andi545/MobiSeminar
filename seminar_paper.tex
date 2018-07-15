@@ -38,13 +38,15 @@ WiFi, IoT, people counting, crowd counting
 
 %Length: 0,75 – 1 page
 \section{Introduction}
-The main motivations behind performing crowd counting in buildings are the applications of energy efficiency, customer guidance in retail stores and traffic optimization "smart" cities. [citation needed] By estimating the number of people in a building, the demand for energy-intensive appliances like air conditioning or heating can be calculated and regulated. By reducing the operation of the appliances for a low number of people, a substantial amount of energy can be saved compared to an unregulated operation. 
+The main motivations behind performing crowd counting in buildings are the applications of energy efficiency, customer guidance in retail stores and traffic optimization "smart" cities. For example, traffic density esimation, travel time measurement or gap counts between successive drivers are possible. By estimating the number of people in a building, the demand for energy-intensive appliances like air conditioning or heating can be calculated and regulated \cite{Agarwal}. By reducing the operation of the appliances for a low number of people, a substantial amount of energy can be saved compared to an unregulated operation with a fixed schedule. In the cited work in particular, potential energy savings from 10\% to 15\% are reported.
 \par
-In customer guidance applications, people could receive information or advertisement based on their proximity to specific products in a store. With the user's consent, this data could be connected to personal characteristics to increase the relevancy of the provided information. For the retail operator, the motivation is to improve user experience and to increase sales counts. For the customer, the additional information can lead to better informed purchase decisions and a feeling of being guided while navigating a store. [citation needed]
+In customer guidance applications, people could receive information or advertisement based on their proximity to specific products in a store. With the user's consent, this data could be connected to personal characteristics to increase the relevancy of the provided information. For the retail operator, the motivation is to improve user experience and to increase sales counts. For the customer, the additional information can lead to better informed purchase decisions and a feeling of being guided while navigating a store.
+In \cite{RetailStores}, the conclusion is that with increased traffic, the store sales volume does not scale linearly. Another interesting finding is the intra-day and inter-day traffic variability correlate with a diminishing store sales volume.
 \par
-Motivations for using WiFi in particular are the low cost of using off-the-shelf components like consumer WLAN routers and transceiver sticks. Off-the-shelf hardware comes with approval by the Federal Communications Commission, which allocates frequency ranges and checks for maximum signal strengths [citation needed]. If one were to develop one's own wireless technology for the problem, an assignment of the used frequency range and maximum signal strength would first be mandatory to apply the solution in public places. The process of assignment and checking is complex and time-consuming. This is the reason why using off-the-shelf hardware can save a large amount of resources. (TODO: all methods device-free?)
+Motivations for using WiFi in particular are the low cost of using off-the-shelf components like consumer WLAN routers and transceiver sticks. Off-the-shelf hardware comes with approval by the Federal Communications Commission, which allocates frequency ranges and determines maximum signal strengths to protect users from harmful radiation. In the official document for the FCC's frequency allocations \cite{fcctable}, it can be seen that the 2.4GHz band used among others for "Wireless Communications" and "ISM Equipment". ISM stands for Industrial, Scientific and Medical equipment. It is meant to be distinct from the purpose of telecommunications. Examples for devices are microwave ovens or medical diathermy machines.
+If one were to develop one's own wireless technology for the problem, an assignment of the used frequency range and maximum signal strength would first be mandatory to apply the solution in public places. The process of assignment and checking is complex and time-consuming. This is the reason why using off-the-shelf hardware can save a large amount of resources.
 \par
-The following work will provide a history of approaches described in research literature. Additionally, a quantitative comparison between the approaches will be shown. Further, the work tries to give an explanation why the problem has not been solved yet despite many years of research. The main contribution of this paper will be a comparison to approaching the crowd counting problem with either WiFi technology, camera sensors or RFID sensors. This comparison will take the factors of accuracy, cost, privacy and perceived privacy by the target person into account. The work is concluded by a Discussion section, that points out assumptions and simplifications being made in other works. Why and how these might make a transition to a real-world scenario infeasible will be laid out.
+The following work will provide a history of approaches described in research literature. Additionally, a quantitative comparison between the approaches will be shown. Further, the work tries to give an explanation why the problem has not been solved yet despite many years of research. The main contribution of this paper will be a comparison to approaching the crowd counting problem with either WiFi technology, camera sensors or RFID sensors. This comparison will take the factors of accuracy, cost, privacy and perceived privacy by the target person into account. The work is concluded by a Discussion section, that points out assumptions and simplifications being made in other works. Why and how these might make a transition to a real-world scenario infeasible will be laid out. In addition to this, there will be a general comparison to device-based methods. All of the methods explained before are device-free, which means that the people to be counted are not required to carry any sort of devices with them.
 
 
 \section{Challenges}
@@ -118,11 +120,14 @@ In the experimental validation, they achieve good accuracy. The estimation error
 Yoshida and Taniguchi \cite{Yoshida} compare a support vector regression-based method and a linear regression-based method in their paper. Regarding the majority of other techniques, this stands out as more of a Machine Learning approach than a Signal Processing approach. They consider the use of existing WiFi devices such as computers, televisions or printers for estimating the number of people. Likewise, they assume that they can access the devices' RSSI readouts by installing a new application to the device or performing a custom firmware update.
 \par
 The linear regression-based method is defined as
-$$ \widehat{m}_{k} = a_0 + \sum\limits_{n_i \in \Nu} a_i r^{mid}_{k,i} $$
+\begin{equation}
+	\hat{m}_{k} = a_0 + \sum\limits_{n_i \in \mathcal{N}} a_i r^{\textrm{mid}}_{k,i}
+\end{equation}
+
 
 For the support vector regression method, the radial basis function kernel with $\sigma = 0.08$ is being adopted.
 \par
-The evaluation is divided into three situations. The first one is deemed presence/absence of people and only distinguishes between these binary states. The second one estimates a degree of congestion which was defined as three categories. Only the third estimation deals with the absolute number of people.
+The evaluation is divided into three situations. The first one is deemed presence/absence of people and only distinguishes between these binary states. The second one estimates a degree of congestion which was defined as three categories. Only the third estimation deals with the absolute number of people. These situations ascend in order of difficulty. As expected, the accuracy rates decrease in that same order. For every situation, the accuracy of the SVR-based method is consistently and significantly higher than for the LR-based method.
 
 \subsection{X-Ray Vision with Only WiFi Power Measurements Using Rytov Wave Models}
 Depatla, Buckland and Mostofi published a paper in 2015 \cite{DepatlaMostofi2015} where they introduce modelling of wave propagation to enable high-resolution see-through imaging. They apply their technique to unmanned, autonomously moving robots and discuss how they improved on the robot positioning and antenna alignment. As this is out of the scope of the current paper, it shall not be explained in further detail. For the wave propagation modelling, Rytov approximations are considered suitable. They are a linearising approximation to Maxwell's equations. Scattering effects are included. They explain that the Wentzel Kramer Brillouin (WKB) approximation often used in X-ray is not suitable for their purposes. It makes an assumption that only holds at high frequencies. The 2,4GHz microwave frequency is low compared to X-ray frequencies. In particular, they state that "Throughout[sic] this paper, high frequency refers to the frequencies at which the size of inhomogeneity of objects is much larger than the wavelength." They go on to lay out the Rytov approximation. It is followed by an explanation of an intensity-only variant of the Rytov Approximation. This is narrowed down further to an intensity-only LOS approximation, that results in the final equation $$P_{LOS} = A\Gamma$$
@@ -169,6 +174,26 @@ In general, to facilitate crowd counting for moving subjects, are reasonably hig
 
 \subsection{Importance of the amount of calibration required}
 The amount of calibration needed for the different techniques compared in table ~\ref{table_overview} does not finally decide over the usefulness of a given technique. Rather, it needs to be put into context with the type of application and area. For approaches that scale to areas and number of people for large events, a high calibration amount is most likely appropriate and worth its effort. On the other hand, for applications where the focus lies on quick deployment and easy setup, an extensive calibration interferes with the usefulness of the approach. Some of the techniques need calibration in an empty room, like the one by \cite{Xu}. If the room is empty at the time of deployment, this calibration step does not add further complications. Calibration methods that require a known number of subjects to be moving randomly or in defined patterns across the area, it is conceivable to automate this step using autonomous robots. The robots will need to be similar to humans in their dimensions and movement speed.
+
+\subsection{Scalability considerations}
+Scaling an approach to a high number of people as it might be prevalent in a real-world scenario adds an additional challenge. Of all the methods presented, the one by Xi et al. \cite{Xi} reports the highest maximum number of people countable, which is 30. However, one of their result diagrams shown in figure \ref{figFrogeyeConvergence} very clearly that the approach will not scale beyond this number. In the diagram, the percentage of non-zero elements metric (PEM) that they introduce and the estimation error are plotted along the axis of ordinates. Along the axis of abscissae, the number of people from 0 to 30 is presented. It is obvious that the PEM converges at about 20 people. At the same time, the estimation error rises in an seemingly exponential manner.
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.4]{figFrogeyeConvergence.PNG}}
+\caption{The maximum distinguished number of people \cite{Xi}}
+\label{figFrogeyeConvergence}
+\end{figure}
+
+Their CSI measurements for increasing numbers of people illustrate the reason for this behaviour \ref{figFrogeyeCsiVariation}. The diagrams show CSI measurements for 0, 2, 4 and 6 moving persons. While in the case of 2 and 4 persons the CSI variation is still perceivable by looking at plot, the case of 6 persons makes it apparent that the pattern starts to resemble a noise pattern.
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.4]{figFrogeyeCsiVariation.png}}
+\caption{CSI measurements of one subcarrier with different moving people \cite{Xi}}
+\label{figFrogeyeCsiVariation}
+\end{figure}
+
+\section{Comparison of device-free and device-based methods}
+All of the methods discussed so far have been device-free. This means that the subjects to count are not required to carry any sort of device with them. The method relies solely on the property of human bodies to reflect and attenuate WiFi signals, thereby altering the signal strength in the receiver. In contrast, device-based methods work by either assuming that the subjects are carrying a device (usually a smartphone) or handing out devices to them to carry prior to the counting phase.
+\par
+
 
 \section{Conclusion}
 Complex wave propagation and decoherence make crowd counting using WiFi a challenging task that is yet to be solved without significant limitations. Techniques refer to a diverse set of basic methods like the Collection Tree Protocol, Conditional Random Fields or Renewal theory. Assumptions made in research literature often do not translate to real-world scenarios.
@@ -364,6 +389,8 @@ For papers published in translation journals, please give the English
 citation first, followed by the original foreign-language citation \cite{b6}.
 %TODO more references
 \begin{thebibliography}{00}
+\bibitem{Agarwal} Occupancy-Driven Energy Management for Smart Building Automation
+\bibitem{RetailStores} Effect of Traffic on Sales and Conversion Rates of Retail Stores
 \bibitem{DepatlaMostofi2018} S. Depatla and Y. Mostofi, ``Crowd Counting Through Walls Using Wifi,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
 \bibitem{Yuan} Yuan et. al., ``Crowd Density Estimation Using Wireless Sensor Networks'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
 \bibitem{ctp} O. Gnawali et al., ``Collection Tree Protocol''
@@ -375,6 +402,7 @@ ional Random Fields: Probabilistic Models for Segmenting and Labeling Sequence D
 \bibitem{Yoshida} Yoshida "Estimating the number of people using existing WiFi access point
 in indoor environment"
 \bibitem{OpenWrt} https://openwrt.org/
+\bibitem{fcctable} https://transition.fcc.gov/oet/spectrum/table/fcctable.pdf
 
 \end{thebibliography}
 \vspace{12pt}
