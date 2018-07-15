@@ -17,23 +17,23 @@
 %should not be used}
 }
 
-\author{\IEEEauthorblockN{1\textsuperscript{st} Andreas Rayzik}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
+\author{\IEEEauthorblockN{Andreas Rayzik}
+\IEEEauthorblockA{\textit{University of Bamberg} \\
+\textit{Information Systems and Applied Computer Sciences}\\
+Bamberg, Germany \\
+andreas.rayzik@stud.uni-bamberg.de}
 
 }
 
 \maketitle
 
 \begin{abstract}
-By using WiFi as a medium for estimating the number of people in a room or in a certain area, a great potential of cost-saving and simplification of deployment can be leveraged.
-\vspace{80mm}
+By using WiFi as a medium for estimating the number of people in a room or in a certain area, a great potential of cost-saving and simplification of deployment can be leveraged. Several approaches have been explored to perform crowd counting using WiFi. This work aims to collect them and compare them quantitatively, as well as discussing the compromises that have been made. The techniques draw ideas from several different basic methods like the Collection Tree Protocol, Conditional Random Fields or Renewal theory.Assumptions made in the works and how they could make a transition to a real-world scenario difficult will be laid out. A comparison between device-free and device-based methods will be explained alongside the privacy issues that are connected to device-based methods. This work tries to give an insight into how the research on this subject is still experimental and emerging. The challenges and reasons to why the problem cannot yet be considered solved will be illustrated.
+
 \end{abstract}
 
 \begin{IEEEkeywords}
-WiFi, IoT, people counting, crowd counting
+WiFi, IoT, people counting, crowd counting, signal processing
 \end{IEEEkeywords}
 
 %Length: 0,75 – 1 page
@@ -82,7 +82,7 @@ Depatla/Mostofi & 2018 & 2 & 20 & Very little
 \end{tabular}
 \end{table*}
 The feature "calibration" is meant to encompass methods like measuring the signal strength for specific densities of people beforehand, 
-As can be seen in \ref{table_overview}, a rough trend has been to reduce the number of nodes needed as well as the calibration necessary.
+As can be seen in table \ref{table_overview}, a rough trend has been to reduce the number of nodes needed as well as the calibration necessary.
 \par
 Bla
 \subsection{Crowd Density Estimation Using Wireless Sensor Networks}
@@ -146,9 +146,8 @@ The focus in the paper lies on capturing high-resolution images through walls, u
 
 \subsection{Crowd Counting through Walls}
 In 2018, Depatla and Mostofi \cite{DepatlaMostofi2018} refined their previous approach to be able to increase the maximum number of people to be counted from 10 to 20. At the same time, the calibration needed was reduced further. They extend their concept to be applicable through walls instead of inside walls. However, their new technique comes with a number of assumptions that make it difficult to be translated to a real-world scenario. A general concept of their approach is depicted in \ref{concept}. The transceiver Tx and the receiver Rx are placed on opposite sides outside the walls of the target room. The direct path between them forms the line of sight (LOS). Up to 20 persons move inside the room. A person's movement is described by the movement speed in x and y coordinates and the angle of direction $\theta$. When one or multiple persons cross the line of sight, the signal is being blocked and attenuated. Also, the presence of persons in the room inevitably leads to multipath effects.
-\begin{figure}
-\label{concept}
-\end{figure}
+
+
 The researchers define the LOS crossing as an event $E$ and the inter-event times as $T_n$. They then define the discretised motion of a person as a Renewal-type process. Renewal theory is a generalization of Poisson processes, where the holding times can be arbitrary. In our case, the inter-event times $T_n$ represent the holding times. The theory of Poisson processes can be traced back to Markov processes. The inter-event times are identically distributed, but not independent. The authors prove that the probability mass function (PMF) of the inter-event times is an implicit function of the number of people $N$.
 \par
 They go on to experimentally validate their approach by a setup using a D-link WBR-1310 router as WiFi transceiver, a TP-Link USB card as WiFi receiver and a Raspberry Pi board for controlling the measurements and storing the obtained RSSI values. All of the devices are cheap, off-the-shelf products. Since the measurement run with a sampling rate of 20Hz over the course of 300 seconds, the Raspberry Pi needs to store 6000 values. The experiment is conducted for different numbers of people $$N = (1, 3, 5, 7, 9)$$ up to $N=20$. Further, different kinds of rooms are being tested with varying dimensions and wall materials. Test subjects were also instructed to follow different walking speeds. The authors conclude that their approach achieves and accuracy of less than 1 person difference 81\% of the time and less than a 2 person difference 100\% of the time.
@@ -196,7 +195,13 @@ All of the methods discussed so far have been device-free. This means that the s
 In the case using smartphones to identify people, this implies complications for user privacy. Smartphones are personal devices, usually used by one person exclusively, containing sensible and potentially valuable personal data. The common approach is to have WiFi or Bluetooth beacons which can sense a smartphone. Smartphones typically scan for open WiFi hotspots and Bluetooth devices at regular intervals. These intervals vary from device to device and by software configuration. If the smartphone is currently in some battery saving state, the interval could be lengthened to the point where a user could walk by a beacon without his smartphone sending a signal to it. In general though, the beacon will catch the smartphones in its surroundings. To protect the users' privacy, the beacon will only save the device's MAC address, which is the address on the physical layer. The MAC address is distinct from a phone's IMEI (International Mobile Equipment Identity). It is not linked to the phone call number in any way. To anonymise the users further, the MAC addresses should be hashed by a modern hashing algorithm like SHA-256. A hashing algorithm is an algorithm that takes an input of arbitrary length and outputs a code of fixed length. It is designed to be infeasible to reverse, so the output code cannot be converted back to the original input. However, the limited number of possible MAC addresses poses a problem. There are $2^48$ possible addresses. With modern, parallel cloud computing and a large enough budget, it is possible to compute the hashes for every possible address in advance and store them in a so-called rainbow-table. The table could then be used as a quick lookup and defy the purpose of the hashing function. During the recent Cryptocurrency mining trend, special ASIC chips have been designed that are especially fast and efficient at computing hash functions \cite{crypto}. If an attacker has access to these kind of devices, he might be able to compute a rainbow table with a substantially reduced budget. A way of mitigating this threat is to add random code to the MAC addresses before hashing. In cryptography, this is called Salting. Nevertheless, the salts need to be stored and can also be stolen by an attacker.
 
 \section{Elaboration of privacy and perceived privacy by the user}
+The work by Depatla, Buckland and Mostofi from 2015 \cite{DepatlaMostofi2015} is a special case for privacy. In this approach, images are generated from successive wireless measurements and the crowd counting is left as a potential preprocessing. The imaging nature of the approach gives the operator much more information than a crowd counting only based on signal strengths. Similar to using cameras, but to a lesser degree, the subjects being imaged need to be obfuscated in some way in order to protect their privacy. If this is not being done, the images could be used to identify subjects. They could not be used for face recognition for example, since there is no RGB or high-resolution depth information. Still, a person's physical properties could be measured and this could be enough to unambiguously identify a person.
+\par
 Device-based methods protect the users' privacy, if only the MAC addresses are collected and hashed with a modern hashing algorithm. However, the users might perceive their privacy as being intruded when it is explained to them that their smartphone is being detected by a beacon. Users are typically not conscious about the fact that their phones are constantly scanning for WiFi hotspots and Bluetooth devices anyway. When they learn that the MAC address is a number on their device, they might confuse it with their phone number that others can use to call them or send text messages. When there are multiple visible beacons in a building that users come across along their way, it might lead to the impression that they are being traced and their route could be followed. The distinction between counting and tracking is crucial when communicating the technology's purpose to the user.
+\par
+In table \ref{table_privacy}, these properties for the privacy and the perceived privacy of the user are collected and compared to other methods that have been discussed in context with this work.
+
+
 \begin{table*}
 \caption{Privacy and perceived privacy for different methods}
 \label{table_privacy}
@@ -222,107 +227,11 @@ Complex wave propagation and decoherence make crowd counting using WiFi a challe
 
 
 
-\subsection{Authors and Affiliations}
-\textbf{The class file is designed for, but not limited to, six authors.} A 
-minimum of one author is required for all conference articles. Author names 
-should be listed starting from left to right and then moving down to the 
-next line. This is the author sequence that will be used in future citations 
-and by indexing services. Names should not be listed in columns nor group by 
-affiliation. Please keep your affiliations as succinct as possible (for 
-example, do not differentiate among departments of the same organization).
-
-\subsection{Identify the Headings}
-Headings, or heads, are organizational devices that guide the reader through 
-your paper. There are two types: component heads and text heads.
-
-Component heads identify the different components of your paper and are not 
-topically subordinate to each other. Examples include Acknowledgments and 
-References and, for these, the correct style to use is ``Heading 5''. Use 
-``figure caption'' for your Figure captions, and ``table head'' for your 
-table title. Run-in heads, such as ``Abstract'', will require you to apply a 
-style (in this case, italic) in addition to the style provided by the drop 
-down menu to differentiate the head from the text.
-
-Text heads organize the topics on a relational, hierarchical basis. For 
-example, the paper title is the primary text head because all subsequent 
-material relates and elaborates on this one topic. If there are two or more 
-sub-topics, the next level head (uppercase Roman numerals) should be used 
-and, conversely, if there are not at least two sub-topics, then no subheads 
-should be introduced.
-
-\subsection{Figures and Tables}
-\paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
-bottom of columns. Avoid placing them in the middle of columns. Large 
-figures and tables may span across both columns. Figure captions should be 
-below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation 
-``Fig.~\ref{fig}'', even at the beginning of a sentence.
-
-\begin{table}[htbp]
-\caption{Table Type Styles}
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
-\cline{2-4} 
-\textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
-\hline
-copy& More table copy$^{\mathrm{a}}$& &  \\
-\hline
-\multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
-\end{tabular}
-\label{tab1}
-\end{center}
-\end{table}
-
-\begin{figure}[htbp]
-\centerline{\includegraphics[scale=0.2]{fig1.png}}
-\caption{Example of a figure caption.}
-\label{fig}
-\end{figure}
-
-Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
-rather than symbols or abbreviations when writing Figure axis labels to 
-avoid confusing the reader. As an example, write the quantity 
-``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
-units in the label, present them within parentheses. Do not label axes only 
-with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
-\{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
-quantities and units. For example, write ``Temperature (K)'', not 
-``Temperature/K''.
-
-\section*{Acknowledgment}
-
-The preferred spelling of the word ``acknowledgment'' in America is without 
-an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
-G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
-acknowledgments in the unnumbered footnote on the first page.
-
-\section*{References}
-
-Please number citations consecutively within brackets. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
-
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
-
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
-
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
 
 \begin{thebibliography}{00}
 \bibitem{Agarwal} Y. Agarwal, B. Balaji, R. Gupta, J. Lyles, M. Wei, and T. Weng, 
-"Occupancy-Driven Energy Management for Smart Building Automation," in Proceedings of the 2nd ACM Workshop on Embedded Sensing Systems for Energy-Efficiency in Building. ACM, 2010, pp. 1–6.
-\bibitem{RetailStores} O. Perdikaki, S. Kesavan, and J. M. Swaminathan, "Effect of traffic on sales and conversion rates of retail stores," Manufacturing & Service Operations Management, vol. 14, no. 1, pp.145–162, 2012.
+"Occupancy-Driven Energy Management for Smart Building Automation," in Proceedings of the 2nd ACM Workshop on Embedded Sensing Systems for Energy-Efficiency in Building. ACM, 2010, pp. 1-6.
+\bibitem{RetailStores} O. Perdikaki, S. Kesavan, and J. M. Swaminathan, "Effect of traffic on sales and conversion rates of retail stores," Manufacturing \& Service Operations Management, vol. 14, no. 1, pp.145-162, 2012.
 \bibitem{fcctable} Federal Communications Commission Office of Engineering and Technology Policy and Rules Division, "FCC ONLINE TABLE OF FREQUENCY ALLOCATIONS," 2018. [Online]. Available: https://transition.fcc.gov/oet/spectrum/table/fcctable.pdf. [Accessed: 08- Jun- 2018].
 \bibitem{Yuan} Y. Yuan, C. Qiu, W. Xi, and J. Zhao, “Crowd density estimation using wireless sensor networks,” in Seventh International Conference on Mobile Ad-hoc and Sensor Networks. IEEE, 2011, pp. 138–145.
 
@@ -339,9 +248,9 @@ citation first, followed by the original foreign-language citation \cite{b6}.
 \bibitem{DepatlaMostofi2015} S. Depatla, L. Buckland, and Y. Mostofi, "X-ray vision with only wifi power measurements using rytov wave models," IEEE Trans. on Vehicular Technology, vol. 64, no. 4, pp. 1376-1387, 2015.
 
 \bibitem{DepatlaMostofi2018} S. Depatla and Y. Mostofi, "Crowd Counting Through Walls Using Wifi," to appear in IEEE International Conference on Pervasive Computing and Communications, 2018.
-\bibitem{OpenWrt} [Online]. Available: https://openwrt.org/. [Accessed: 12- Jun- 2018].
+\bibitem{OpenWrt} [Online]. OpenWrt Wireless Freedom. Available: https://openwrt.org/. [Accessed: 12- Jun- 2018].
 
-\bibitem{crypto} [Online]. Available: https://arstechnica.com/information-technology/2013/06/gold-in-them-bits-inside-the-worlds-most-mysterious-bitcoin-mining-company/2/. [Accessed: 13- Jun- 2018].
+\bibitem{crypto} C. Farivar, "Gold in them bits: Inside the world's most mysterious Bitcoin mining company," Arstechnica, 2013. [Online]. Available: https://arstechnica.com/information-technology/2013/06/gold-in-them-bits-inside-the-worlds-most-mysterious-bitcoin-mining-company/2/. [Accessed: 13- Jun- 2018].
 
 \end{thebibliography}
 
